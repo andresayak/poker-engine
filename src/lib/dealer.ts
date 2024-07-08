@@ -181,6 +181,7 @@ export default class Dealer {
         const bigBlindSeat = this.postBlinds()
         const firstAction = this.nextOrWrap(bigBlindSeat)
         this.dealHoleCards()
+        this.dealCommunityCards();
         if (this._players.filter((player, seat) => player !== null && (player.stack() !== 0 || seat === bigBlindSeat)).length > 1) {
             this._bettingRound = new BettingRound([...this._players], firstAction, this._forcedBets.blinds.big, this._forcedBets.blinds.big)
         }
@@ -218,7 +219,7 @@ export default class Dealer {
             if (this._potManager.pots().length === 1 && this._potManager.pots()[0].eligiblePlayers().length === 1) {
                 // ...there is no need to deal the undealt community cards.
             } else {
-                this.dealCommunityCards()
+                //this.dealCommunityCards()
             }
             this._bettingRoundsCompleted = true
             // Now you call showdown()
@@ -227,7 +228,7 @@ export default class Dealer {
             this._roundOfBetting = next(this._roundOfBetting)
             this._players = this._bettingRound?.players() ?? []
             this._bettingRound = new BettingRound([...this._players], this.nextOrWrap(this._button), this._forcedBets.blinds.big)
-            this.dealCommunityCards()
+            //this.dealCommunityCards()
             assert(!this._bettingRoundsCompleted)
         } else {
             assert(this._roundOfBetting === RoundOfBetting.RIVER)
@@ -355,7 +356,7 @@ export default class Dealer {
     // Deals community cards up until the current round of betting.
     private dealCommunityCards(): void {
         const cards: Card[] = []
-        const numCardsToDeal = this._roundOfBetting - this._communityCards.cards().length
+        const numCardsToDeal = 5;//this._roundOfBetting - this._communityCards.cards().length
         for (let index = 0; index < numCardsToDeal; index++) {
             cards.push(this._deck.draw())
         }
